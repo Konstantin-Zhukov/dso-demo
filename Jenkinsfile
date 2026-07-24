@@ -62,13 +62,26 @@ pipeline {
           }
           post {
             success {
-              dependencyTrackPublisher projectName: 'sample-spring-app',
-                projectVersion: '0.0.1', artifact: 'target/bom.xml',
-                synchronous: true
+              // dependencyTrackPublisher projectName: 'sample-spring-app',
+              //   projectVersion: '0.0.1', artifact: 'target/bom.xml',
+              //   synchronous: true
               archiveArtifacts allowEmptyArchive: true, artifacts: 'target/bom.xml',
                 fingerprint: true, onlyIfSuccessful: true
             }
           }
+        }
+      }
+    }
+    stage('SAST') {
+      steps {
+        container('slscan') {
+          sh 'scan --type java,depscan --build'
+        }
+      }
+      post {
+        success {
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/*',
+            fingerprint: true, onlyIfSuccessful: true
         }
       }
     }
