@@ -1,0 +1,31 @@
+ingress:
+  enabled: false
+frontend:
+  replicaCount: 1
+  service:
+    type: NodePort
+  env:
+    - name: API_BASE_URL
+      value: "http://8.228.42.93:31070"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+apiserver:
+  service:
+    type: NodePort
+  resources:
+    requests:
+      cpu: 1
+      memory: 3000Mi
+    limits:
+      cpu: 2
+      memory: 7Gi
+postgresql:
+  image:
+    registry: docker.io
+    repository: postgres
+    tag: "11"
