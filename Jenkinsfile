@@ -1,4 +1,7 @@
 pipeline {
+  environment {
+    ARGO_SERVER = 'argocd-server.argocd.svc.cluster.local'
+  }
   agent {
     kubernetes {
       yamlFile 'build-agent.yaml'
@@ -62,9 +65,6 @@ pipeline {
           }
           post {
             success {
-              // dependencyTrackPublisher projectName: 'sample-spring-app',
-              //   projectVersion: '0.0.1', artifact: 'target/bom.xml',
-              //   synchronous: true
               archiveArtifacts allowEmptyArchive: true, artifacts: 'target/bom.xml',
                 fingerprint: true, onlyIfSuccessful: true
             }
@@ -97,10 +97,34 @@ pipeline {
       }
     }
 
-    stage('Deploy to Dev') {
+    stage('Docker Build and Push') {
       steps {
-        // TODO
-        sh "echo done"
+        container('kaniko') {
+          withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+            sh '''
+              AUTH=$(echo -n "$DOCKERHUB_USER:$DOCKERHUB_PASS" | base64 | tr -d '\\n')
+              mkdir -p /kaniko/.docker
+              echo "{\\"auths\\":{\\"https://index.docker.io/v1/\\":{\\"auth\\":\\"$AUTH\\"}}}" > /kaniko/.docker/config.json
+              /kaniko/executor \\
+                --context=$(pwd) \\
+                --dockerfile=$(pwd)/Dockerfile \\
+                --destination=kostetych/dso-demo:${BUILD_NUMBER} \\
+                --destination=kostetych/dso-demo:latest
+            '''
+          }
+        }
+      }
+    }
+
+    stage('Deploy to Dev') {
+      environment {
+        AUTH_TOKEN = credentials('argocd-jenkins-deployer-token')
+      }
+      steps {
+        container('argocd-cli') {
+          sh 'argocd app sync dso-demo --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN'
+          sh 'argocd app wait dso-demo --health --timeout 300 --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN'
+        }
       }
     }
   }

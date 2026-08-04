@@ -39,6 +39,18 @@ spec:
       command:
         - cat
       tty: true
+    - name: argocd-cli
+      image: schoolofdevops/argocd-cli
+      command:
+        - cat
+      tty: true
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:debug
+      command:
+        - sleep
+      args:
+        - "9999999"
+      tty: true
   volumes:
     - name: m2
       hostPath:
