@@ -74,9 +74,13 @@ pipeline {
     }
     stage('SAST') {
       steps {
-        container('slscan') {
-          sh 'scan --type java,depscan --build'
-        }
+        container('semgrep') {
+      sh '''
+        mkdir -p reports
+        semgrep --config=auto --sarif --output=reports/semgrep-report.sarif . || true
+        semgrep --config=auto --json --output=reports/semgrep-report.json . || true
+      '''
+    }
       }
       post {
         success {

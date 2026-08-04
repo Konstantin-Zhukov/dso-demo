@@ -33,9 +33,8 @@ spec:
       command:
         - cat
       tty: true
-    - name: slscan
-      image: shiftleft/sast-scan:v2.1.2
-      imagePullPolicy: Always
+    - name: semgrep
+      image: semgrep/semgrep:latest
       command:
         - cat
       tty: true
