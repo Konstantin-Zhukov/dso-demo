@@ -11,8 +11,9 @@ ARG USER=devops
 ENV HOME=/home/$USER
 WORKDIR /app
 
-RUN adduser -D $USER && \
-    chown $USER:$USER /app
+RUN addgroup -g 11000 $USER && \
+  adduser -D -u 11000 -G $USER $USER && \
+  chown $USER:$USER /app
 
 COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
 
