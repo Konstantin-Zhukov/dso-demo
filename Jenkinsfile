@@ -48,7 +48,6 @@ pipeline {
           steps {
             container('licensefinder') {
               catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                sh 'license_finder report'
                 sh 'ls -al'
                 sh '''#!/bin/bash --login
                   /bin/bash --login
