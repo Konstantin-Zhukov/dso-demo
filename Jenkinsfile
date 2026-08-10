@@ -122,13 +122,14 @@ pipeline {
       }
     }
 	
-    stage('Scan k8s Deploy Code') {
-      steps {
-        container('maven') {
-          sh 'curl -s -X POST --data-binary @deploy/dso-demo-deploy.yaml https://kubesec.io/api/v1/scan'
-        }
+   stage('Scan k8s Deploy Code') {
+    steps {
+      container('maven') {
+        sh 'curl -sSX POST --data-binary @deploy/dso-demo-deploy.yaml https://v2.kubesec.io/scan'
       }
     }
+  }
+
     stage('Deploy to Dev') {
       environment {
         AUTH_TOKEN = credentials('argocd-jenkins-deployer-token')
