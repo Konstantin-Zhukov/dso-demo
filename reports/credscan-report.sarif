@@ -1,0 +1,75 @@
+{
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Secrets Audit",
+          "version": "1.0.0-scan",
+          "fullName": "Secrets Audit"
+        }
+      },
+      "conversion": {
+        "tool": {
+          "driver": {
+            "name": "@ShiftLeft/sast-scan"
+          }
+        },
+        "invocation": {
+          "arguments": [
+            "--config-path=/usr/local/src/lib/../credscan-config.toml",
+            "--path=/app",
+            "--leaks-exit-code=0",
+            "--no-git",
+            "--report=/app/reports/credscan-report.json"
+          ],
+          "executionSuccessful": true,
+          "commandLine": "--config-path=/usr/local/src/lib/../credscan-config.toml --path=/app --leaks-exit-code=0 --no-git --report=/app/reports/credscan-report.json",
+          "endTimeUtc": "2026-07-24T14:27:26Z",
+          "workingDirectory": {
+            "uri": "file:///Users/kostiantynzhukov/code/learning/impl-devsec-ops/dso-demo"
+          }
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "endTimeUtc": "2026-07-24T14:27:26Z",
+          "workingDirectory": {
+            "uri": "file:///Users/kostiantynzhukov/code/learning/impl-devsec-ops/dso-demo"
+          }
+        }
+      ],
+      "properties": {
+        "metrics": {
+          "total": 0,
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0
+        }
+      },
+      "results": [],
+      "automationDetails": {
+        "description": {
+          "text": "Static Analysis Security Test results using @ShiftLeft/sast-scan"
+        },
+        "guid": "6c982028-320a-45da-a37d-a10da3fe861e"
+      },
+      "versionControlProvenance": [
+        {
+          "branch": "main",
+          "repositoryUri": "https://github.com/Konstantin-Zhukov/dso-demo",
+          "revisionId": "4824863b3ebe5f9220a237ec3f8267934b3333e4"
+        }
+      ]
+    }
+  ],
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "inlineExternalProperties": [
+    {
+      "guid": "6c982028-320a-45da-a37d-a10da3fe861e",
+      "runGuid": "843fa4e8-274c-43ea-818e-0c7c3ed75568"
+    }
+  ]
+}
