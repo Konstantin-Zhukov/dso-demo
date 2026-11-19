@@ -15,8 +15,7 @@ spec:
       labels:
         app: dso-demo
       annotations:
-        vault.hashicorp.com/agent-inject: 'true' vault.hashicorp.com/role: 
-        'dso-demo'
+        vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'dso-demo'
         vault.hashicorp.com/agent-inject-secret-database: 'secret/dso-demo/database'
 
